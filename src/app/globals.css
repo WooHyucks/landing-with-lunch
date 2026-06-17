@@ -1,0 +1,69 @@
+@import "tailwindcss" source(none);
+@source "../**/*.{js,ts,jsx,tsx}";
+
+@import "tw-animate-css";
+@import "../styles/fonts.css";
+@import "../styles/theme.css";
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes softFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes softPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 0.88;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+.soft-float {
+  animation: softFloat 4s ease-in-out infinite;
+}
+
+.soft-pulse {
+  animation: softPulse 2.6s ease-in-out infinite;
+}
+
+.slide-up {
+  animation: slideUp 0.45s ease-out both;
+}
+
+.cute-wiggle {
+  animation: wiggle 1.4s ease-in-out infinite;
+}
