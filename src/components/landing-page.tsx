@@ -142,7 +142,7 @@ export function LandingPage() {
   useEffect(() => {
     timerRef.current = setInterval(
       () => setCurrent((p) => (p + 1) % testimonials.length),
-      5000
+      5000,
     );
 
     return () => {
@@ -165,7 +165,7 @@ export function LandingPage() {
 
     timerRef.current = setInterval(
       () => setCurrent((p) => (p + 1) % testimonials.length),
-      5000
+      5000,
     );
   };
 
@@ -180,8 +180,7 @@ export function LandingPage() {
       no: "01",
       icon: Hospital,
       title: "병원 점심\n도시락 배송",
-      desc:
-        "진료와 업무로 바쁜 병원 직원분들을 위해 정해진 시간에 도시락을 배송합니다. 밖에 나가지 않아도 든든한 점심을 챙길 수 있어요.",
+      desc: "진료와 업무로 바쁜 병원 직원분들을 위해 정해진 시간에 도시락을 배송합니다. 밖에 나가지 않아도 든든한 점심을 챙길 수 있어요.",
       tags: ["점심시간 절약", "정시 배송", "메뉴 고민 없음"],
       img: bentoFlatlay,
       badge: "병원 추천",
@@ -190,8 +189,7 @@ export function LandingPage() {
       no: "02",
       icon: Briefcase,
       title: "직장 점심\n정기 배송",
-      desc:
-        "매일 점심 메뉴를 고르고 이동하는 시간을 줄여드립니다. 사무실에서 편하게 받아보는 따뜻한 한 끼를 경험하세요.",
+      desc: "매일 점심 메뉴를 고르고 이동하는 시간을 줄여드립니다. 사무실에서 편하게 받아보는 따뜻한 한 끼를 경험하세요.",
       tags: ["매일 다른 메뉴", "사무실 배송", "3인 이상 가능"],
       img: bentoArtistic,
       badge: "직장 인기",
@@ -200,8 +198,7 @@ export function LandingPage() {
       no: "03",
       icon: Store,
       title: "가게·매장\n점심 도시락",
-      desc:
-        "점심시간에도 자리를 비우기 어려운 매장, 학원, 소형 사업장을 위한 도시락 배송 서비스입니다.",
+      desc: "점심시간에도 자리를 비우기 어려운 매장, 학원, 소형 사업장을 위한 도시락 배송 서비스입니다.",
       tags: ["소규모 가능", "시간 절약", "간편 주문"],
       img: saladBowl,
       badge: "소규모 가능",
@@ -341,8 +338,8 @@ export function LandingPage() {
       </header>
 
       {/* HERO */}
-      <section className="pt-16 min-h-screen grid lg:grid-cols-[1fr_1fr] overflow-hidden">
-        <div className="bg-[#141414] flex flex-col justify-center px-10 lg:px-16 xl:px-40 py-20 lg:py-0 relative overflow-hidden">
+      <section className="pt-16 min-h-[100svh] grid lg:grid-cols-[0.92fr_1.08fr] xl:grid-cols-[1fr_1fr] overflow-hidden">
+        <div className="bg-[#141414] flex flex-col justify-center px-6 sm:px-10 lg:px-10 xl:px-16 2xl:px-40 py-14 sm:py-16 lg:py-10 xl:py-14 2xl:py-0 min-h-[calc(100svh-4rem)] relative overflow-hidden">
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -356,9 +353,9 @@ export function LandingPage() {
             style={{ background: ORANGE }}
           />
 
-          <div className="relative z-10 max-w-[560px]">
+          <div className="relative z-10 max-w-[560px] xl:max-w-[500px] 2xl:max-w-[560px]">
             <div
-              className="inline-flex items-center gap-2 mb-8 text-[11px] font-bold tracking-[0.12em] uppercase px-3 py-1.5 rounded-full border soft-pulse"
+              className="inline-flex items-center gap-2 mb-5 xl:mb-6 2xl:mb-8 text-[11px] font-bold tracking-[0.12em] uppercase px-3 py-1.5 rounded-full border soft-pulse"
               style={{
                 color: ORANGE,
                 borderColor: `${ORANGE}40`,
@@ -372,15 +369,17 @@ export function LandingPage() {
               점심시간을 아껴주는 도시락 정기배송
             </div>
 
-            <h1 className="text-[2.75rem] lg:text-[3.5rem] xl:text-[4rem] font-extrabold text-white leading-[1.08] tracking-[-0.03em] mb-6">
+            <h1 className="text-[2.45rem] sm:text-[2.75rem] lg:text-[2.3rem] xl:text-[2.6rem] 2xl:text-[3rem] font-extrabold text-white leading-[1.08] tracking-[-0.03em] mb-4 xl:mb-5 2xl:mb-6">
               오늘 점심 뭐 먹지?
               <br />
               <span style={{ color: ORANGE }}>그 고민,</span>
               <br />
-              위드런치가 끝내드릴게요
+              위드런치가
+              <br />
+              끝내드릴게요
             </h1>
 
-            <p className="text-white/55 text-base lg:text-[17px] leading-relaxed mb-8 font-normal">
+            <p className="text-white/55 text-[15px] xl:text-[16px] 2xl:text-[17px] leading-relaxed mb-5 xl:mb-6 2xl:mb-8 font-normal">
               병원, 사무실, 매장에서 바쁜 점심시간마다
               <br className="hidden lg:block" />
               밖에 나가고 줄 서는 시간을 줄여드립니다.
@@ -388,9 +387,9 @@ export function LandingPage() {
               매일 다른 도시락을 정해진 시간에 받아보세요.
             </p>
 
-            <div className="bg-white/[0.06] border border-white/[0.1] rounded-2xl p-5 mb-8 transition-all duration-500 slide-up">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-white/[0.08] flex items-center justify-center text-2xl shrink-0">
+            <div className="bg-white/[0.06] border border-white/[0.1] rounded-2xl p-4 2xl:p-5 mb-5 xl:mb-6 2xl:mb-8 transition-all duration-500 slide-up">
+              <div className="flex items-start gap-3 2xl:gap-4">
+                <div className="w-11 h-11 2xl:w-12 2xl:h-12 rounded-2xl bg-white/[0.08] flex items-center justify-center text-2xl shrink-0">
                   {lunchPains[painIndex].emoji}
                 </div>
                 <div>
@@ -398,17 +397,14 @@ export function LandingPage() {
                     {(() => {
                       const Icon = lunchPains[painIndex].icon;
                       return (
-                        <Icon
-                          className="w-4 h-4"
-                          style={{ color: ORANGE }}
-                        />
+                        <Icon className="w-4 h-4" style={{ color: ORANGE }} />
                       );
                     })()}
-                    <p className="text-white font-extrabold text-base">
+                    <p className="text-white font-extrabold text-[15px] 2xl:text-base">
                       {lunchPains[painIndex].title}
                     </p>
                   </div>
-                  <p className="text-white/45 text-sm leading-relaxed">
+                  <p className="text-white/45 text-[13px] 2xl:text-sm leading-relaxed">
                     {lunchPains[painIndex].desc}
                   </p>
                 </div>
@@ -430,10 +426,10 @@ export function LandingPage() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3 mb-12">
+            <div className="flex flex-wrap gap-3 mb-6 xl:mb-7 2xl:mb-12">
               <button
                 onClick={() => setCouponOpen(true)}
-                className="flex items-center gap-2 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+                className="flex items-center gap-2 text-white font-bold text-sm px-5 2xl:px-6 py-3 2xl:py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
                 style={{
                   background: ORANGE,
                   boxShadow: `0 8px 24px ${ORANGE}50`,
@@ -443,7 +439,7 @@ export function LandingPage() {
               </button>
               <a
                 href="#services"
-                className="flex items-center gap-2 text-white/70 font-semibold text-sm px-6 py-3.5 rounded-xl border border-white/15 hover:border-white/30 transition-all"
+                className="flex items-center gap-2 text-white/70 font-semibold text-sm px-5 2xl:px-6 py-3 2xl:py-3.5 rounded-xl border border-white/15 hover:border-white/30 transition-all"
               >
                 서비스 보기 <ArrowRight className="w-4 h-4" />
               </a>
@@ -455,25 +451,30 @@ export function LandingPage() {
                 { v: "0번", l: "메뉴 고민", icon: Smile },
                 { v: "3일", l: "쿠폰 체험", icon: Gift },
               ].map(({ v, l, icon: Icon }) => (
-                <div key={l} className="bg-[#1C1C1C] px-4 py-4 text-center">
+                <div
+                  key={l}
+                  className="bg-[#1C1C1C] px-3 2xl:px-4 py-3 2xl:py-4 text-center"
+                >
                   <Icon
                     className="w-4 h-4 mx-auto mb-2"
                     style={{ color: ORANGE }}
                   />
                   <p
-                    className="text-xl font-extrabold tabular-nums mb-0.5"
+                    className="text-lg 2xl:text-xl font-extrabold tabular-nums mb-0.5"
                     style={{ color: ORANGE }}
                   >
                     {v}
                   </p>
-                  <p className="text-white/40 text-[11px] font-medium">{l}</p>
+                  <p className="text-white/40 text-[10px] 2xl:text-[11px] font-medium">
+                    {l}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="relative min-h-[56vh] lg:min-h-0">
+        <div className="relative min-h-[56vh] lg:min-h-[calc(100svh-4rem)]">
           <ImageWithFallback
             src={heroFood}
             alt="위드런치 점심 도시락"
@@ -488,7 +489,7 @@ export function LandingPage() {
             }}
           />
 
-          <div className="absolute top-8 left-8 bg-white rounded-2xl p-4 shadow-2xl max-w-[210px] soft-float">
+          <div className="absolute top-6 xl:top-8 left-6 xl:left-8 bg-white rounded-2xl p-4 shadow-2xl max-w-[200px] xl:max-w-[210px] soft-float">
             <div className="flex items-center gap-2 mb-3">
               <div
                 className="w-8 h-8 rounded-xl flex items-center justify-center"
@@ -507,7 +508,7 @@ export function LandingPage() {
             </p>
           </div>
 
-          <div className="absolute bottom-8 right-8 bg-white rounded-2xl p-5 shadow-2xl max-w-[230px]">
+          <div className="absolute bottom-6 xl:bottom-8 right-6 xl:right-8 bg-white rounded-2xl p-4 xl:p-5 shadow-2xl max-w-[220px] xl:max-w-[230px]">
             <div className="flex items-center gap-2 mb-3">
               <div
                 className="w-7 h-7 rounded-lg flex items-center justify-center"
@@ -668,7 +669,10 @@ export function LandingPage() {
 
               <div className="absolute top-5 right-5 bg-white/90 backdrop-blur-sm rounded-xl px-3.5 py-2 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" style={{ color: ORANGE }} />
-                <span className="text-[11px] font-bold" style={{ color: ORANGE }}>
+                <span
+                  className="text-[11px] font-bold"
+                  style={{ color: ORANGE }}
+                >
                   {services[activeTab].badge}
                 </span>
               </div>
@@ -695,8 +699,8 @@ export function LandingPage() {
               </h2>
             </div>
             <p className="text-[#1A1A1A]/50 text-sm max-w-sm leading-relaxed">
-              도시락, 샐러드, 샌드위치까지. 바쁜 하루에도 가볍게,
-              든든하게 먹을 수 있도록 준비합니다.
+              도시락, 샐러드, 샌드위치까지. 바쁜 하루에도 가볍게, 든든하게 먹을
+              수 있도록 준비합니다.
             </p>
           </div>
 
@@ -837,8 +841,7 @@ export function LandingPage() {
                 className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.14em] uppercase mb-5 px-3 py-1.5 rounded-full"
                 style={{ color: ORANGE, background: `${ORANGE}15` }}
               >
-                <Gift className="w-3.5 h-3.5" />
-                첫 이용 혜택
+                <Gift className="w-3.5 h-3.5" />첫 이용 혜택
               </div>
 
               <h2 className="text-3xl lg:text-[2.8rem] font-extrabold text-white leading-tight tracking-tight mb-6">
@@ -848,8 +851,8 @@ export function LandingPage() {
               </h2>
 
               <p className="text-white/50 text-[15px] leading-relaxed max-w-xl mb-8">
-                점심 도시락은 말보다 경험이 빠릅니다. 3일 동안 실제로
-                받아보고, 점심시간이 얼마나 편해지는지 확인해보세요.
+                점심 도시락은 말보다 경험이 빠릅니다. 3일 동안 실제로 받아보고,
+                점심시간이 얼마나 편해지는지 확인해보세요.
               </p>
 
               <div className="grid sm:grid-cols-3 gap-3">
@@ -1007,8 +1010,8 @@ export function LandingPage() {
                   쉬는 시간이어야 하니까요
                 </h3>
                 <p className="text-white/70 text-sm leading-relaxed">
-                  메뉴 고르고, 이동하고, 줄 서는 시간을 줄이면 점심시간이
-                  훨씬 여유로워집니다.
+                  메뉴 고르고, 이동하고, 줄 서는 시간을 줄이면 점심시간이 훨씬
+                  여유로워집니다.
                 </p>
               </div>
               <a
@@ -1030,8 +1033,7 @@ export function LandingPage() {
                 className="h-1.5 rounded-full transition-all duration-300"
                 style={{
                   width: i === current ? "1.5rem" : "0.375rem",
-                  background:
-                    i === current ? ORANGE : "rgba(0,0,0,0.16)",
+                  background: i === current ? ORANGE : "rgba(0,0,0,0.16)",
                 }}
               />
             ))}
@@ -1058,8 +1060,8 @@ export function LandingPage() {
               </h2>
 
               <p className="text-[#1A1A1A]/55 text-[15px] leading-relaxed mb-10">
-                병원, 직장, 매장처럼 점심시간이 바쁜 곳이라면 위드런치가
-                잘 맞습니다. 가능한 지역과 메뉴 구성을 빠르게 안내드릴게요.
+                병원, 직장, 매장처럼 점심시간이 바쁜 곳이라면 위드런치가 잘
+                맞습니다. 가능한 지역과 메뉴 구성을 빠르게 안내드릴게요.
               </p>
 
               <div className="space-y-0 divide-y divide-[rgba(0,0,0,0.06)]">
@@ -1149,7 +1151,10 @@ export function LandingPage() {
                     className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5"
                     style={{ background: `${ORANGE}15` }}
                   >
-                    <CheckCircle2 className="w-8 h-8" style={{ color: ORANGE }} />
+                    <CheckCircle2
+                      className="w-8 h-8"
+                      style={{ color: ORANGE }}
+                    />
                   </div>
                   <h3 className="text-xl font-extrabold text-[#1A1A1A] mb-3">
                     문의가 접수되었습니다!
@@ -1226,7 +1231,9 @@ export function LandingPage() {
                               })
                             }
                             className="w-full bg-white border border-[rgba(0,0,0,0.1)] rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#1A1A1A]/30 outline-none transition-all"
-                            onFocus={(e) => (e.target.style.borderColor = ORANGE)}
+                            onFocus={(e) =>
+                              (e.target.style.borderColor = ORANGE)
+                            }
                             onBlur={(e) =>
                               (e.target.style.borderColor = "rgba(0,0,0,0.1)")
                             }
@@ -1268,7 +1275,9 @@ export function LandingPage() {
                               })
                             }
                             className="w-full bg-white border border-[rgba(0,0,0,0.1)] rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#1A1A1A]/30 outline-none transition-all"
-                            onFocus={(e) => (e.target.style.borderColor = ORANGE)}
+                            onFocus={(e) =>
+                              (e.target.style.borderColor = ORANGE)
+                            }
                             onBlur={(e) =>
                               (e.target.style.borderColor = "rgba(0,0,0,0.1)")
                             }
@@ -1431,8 +1440,8 @@ export function LandingPage() {
                 </span>
               </div>
               <p className="text-white/35 text-[13px] leading-relaxed mb-6 max-w-[230px]">
-                병원, 직장, 매장의 점심시간을 더 편하게 만들어주는 도시락
-                배송 서비스.
+                병원, 직장, 매장의 점심시간을 더 편하게 만들어주는 도시락 배송
+                서비스.
               </p>
               <div className="flex gap-2">
                 {[Instagram, Youtube].map((Icon, i) => (
@@ -1570,8 +1579,8 @@ export function LandingPage() {
             </h3>
 
             <p className="text-[#1A1A1A]/55 text-sm leading-relaxed mb-6">
-              매일 점심 메뉴 고르느라 시간을 쓰고 있다면, 위드런치를
-              3일만 경험해보세요. 점심시간이 얼마나 편해지는지 바로 느낄 수 있어요.
+              매일 점심 메뉴 고르느라 시간을 쓰고 있다면, 위드런치를 3일만
+              경험해보세요. 점심시간이 얼마나 편해지는지 바로 느낄 수 있어요.
             </p>
 
             <div className="bg-[#F8F7F5] rounded-2xl p-4 mb-6 space-y-3">
