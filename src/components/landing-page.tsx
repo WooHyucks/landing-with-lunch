@@ -25,14 +25,13 @@ import {
   MessageCircle,
   Hospital,
   Briefcase,
-  Store,
+  Factory,
+  Warehouse,
   Coffee,
   Heart,
   TicketPercent,
   BadgeCheck,
   Send,
-  Search,
-  Copy,
 } from "lucide-react";
 
 const heroFood = "/images/KakaoTalk_Photo_2026-04-01-17-50-43_003.jpeg";
@@ -40,44 +39,28 @@ const bentoFlatlay = "/images/KakaoTalk_Photo_2026-04-01-17-50-43_002.jpeg";
 const bentoArtistic = "/images/KakaoTalk_Photo_2026-04-01-17-50-43_006.jpeg";
 const saladBowl = "/images/KakaoTalk_Photo_2026-04-01-17-50-43_001.jpeg";
 const sandwich = "/images/KakaoTalk_Photo_2026-04-01-17-50-43_007.jpeg";
-const brochureFood = "/images/KakaoTalk_Photo_2026-04-01-18-00-35_002.jpeg";
+const kakaoQr = "/images/kakao-qr.png";
+const logo = "/logo.png";
 
 const ORANGE = "#EB5722";
 
-const MAIN_PHONE = "1577-8519";
-const MAIN_PHONE_TEL = "15778519";
-const MOBILE_PHONE = "010-5507-2905";
-const MOBILE_PHONE_TEL = "01055072905";
-const KAKAO_ID = "WithLunch";
-
-// 실제 카카오 채널 URL이 있으면 여기에 넣으면 바로 이동됩니다.
-// 예: const KAKAO_URL = "https://pf.kakao.com/_xxxxxx";
-const KAKAO_URL = "#";
+const PHONE = "010-5507-2905";
+const PHONE_TEL = "01055072905";
+const KAKAO_URL = "https://pf.kakao.com/_JxbgKn";
+const KAKAO_MENU_URL = "https://pf.kakao.com/_JxbgKn/posts";
 
 const testimonials = [
   {
     quote:
       "점심시간마다 밖에 나가서 줄 서는 게 은근히 스트레스였는데, 위드런치로 바꾸고 나서 직원들이 훨씬 여유롭게 쉬게 됐어요.",
-    author: "김현진",
-    role: "병원 행정팀",
-    company: "강남구 내과",
-    rating: 5,
   },
   {
     quote:
       "매일 ‘오늘 뭐 먹지?’ 고민하는 시간이 줄었어요. 도시락이 정해진 시간에 오니까 점심시간이 훨씬 깔끔해졌습니다.",
-    author: "박성우",
-    role: "운영 매니저",
-    company: "분당 오피스",
-    rating: 5,
   },
   {
     quote:
-      "매장에서 점심 먹으러 나가기가 애매했는데, 도시락을 받아보니까 훨씬 편합니다. 3일 체험하고 바로 정기 이용했어요.",
-    author: "이지연",
-    role: "매장 관리자",
-    company: "성수동 스튜디오",
-    rating: 5,
+      "점심 먹으러 나가기가 애매했는데, 도시락을 받아보니까 훨씬 편합니다. 3일 체험하고 바로 정기 이용했어요.",
   },
 ];
 
@@ -116,7 +99,7 @@ export function LandingPage() {
   const [painIndex, setPainIndex] = useState(0);
   const [couponOpen, setCouponOpen] = useState(false);
   const [kakaoGuideOpen, setKakaoGuideOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -125,6 +108,15 @@ export function LandingPage() {
     window.addEventListener("scroll", fn, { passive: true });
 
     return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  useEffect(() => {
+    const checkDesktop = () =>
+      setIsDesktop(window.matchMedia("(min-width: 1024px)").matches);
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+
+    return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
   useEffect(() => {
@@ -180,22 +172,15 @@ export function LandingPage() {
   const openKakaoGuide = (
     e?: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
   ) => {
-    if (KAKAO_URL === "#") {
-      e?.preventDefault();
-      setCouponOpen(false);
+    e?.preventDefault();
+    setCouponOpen(false);
+
+    if (isDesktop) {
       setKakaoGuideOpen(true);
       return;
     }
-  };
 
-  const copyKakaoId = async () => {
-    try {
-      await navigator.clipboard.writeText(KAKAO_ID);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1600);
-    } catch {
-      setCopied(false);
-    }
+    window.open(KAKAO_URL, "_blank", "noopener,noreferrer");
   };
 
   const services = [
@@ -204,27 +189,36 @@ export function LandingPage() {
       icon: Hospital,
       title: "병원 점심\n도시락 배송",
       desc: "진료와 업무로 바쁜 병원 직원분들을 위해 정해진 시간에 도시락을 배송합니다. 밖에 나가지 않아도 든든한 점심을 챙길 수 있어요.",
-      tags: ["도시락 8,000원", "음료 포함 8,200원", "정시 배송 상담"],
+      tags: ["도시락 8,000원", "샐러드/샌드위치 8,000원", "정시 배송 상담"],
       img: bentoFlatlay,
-      badge: "병원 추천",
+      badge: "병원",
     },
     {
       no: "02",
-      icon: Briefcase,
-      title: "직장 점심\n정기 배송",
-      desc: "매일 점심 메뉴를 고르고 이동하는 시간을 줄여드립니다. 사무실에서 편하게 받아보는 따뜻한 한 끼를 경험하세요.",
-      tags: ["메뉴 고민 없음", "사무실 배송", "전화·카톡 빠른 상담"],
+      icon: Factory,
+      title: "공장 점심\n도시락 배송",
+      desc: "교대 근무와 현장 업무로 바쁜 공장 직원분들을 위해 정해진 시간에 도시락을 배송합니다. 이동 없이 점심을 해결하세요.",
+      tags: ["현장 배송", "메뉴 고민 없음", "전화·카톡 빠른 상담"],
       img: bentoArtistic,
-      badge: "직장 인기",
+      badge: "공장",
     },
     {
       no: "03",
-      icon: Store,
-      title: "가게·매장\n점심 도시락",
-      desc: "점심시간에도 자리를 비우기 어려운 매장, 학원, 소형 사업장을 위한 도시락 배송 서비스입니다.",
-      tags: ["소규모 상담 가능", "시간 절약", "간편 문의"],
+      icon: Warehouse,
+      title: "창고 점심\n도시락 배송",
+      desc: "물류·창고 현장처럼 점심시간에 자리를 비우기 어려운 곳을 위한 도시락 배송 서비스입니다.",
+      tags: ["현장 맞춤 상담", "시간 절약", "간편 문의"],
       img: saladBowl,
-      badge: "소규모 가능",
+      badge: "창고",
+    },
+    {
+      no: "04",
+      icon: Briefcase,
+      title: "사무실 점심\n정기 배송",
+      desc: "매일 점심 메뉴를 고르고 이동하는 시간을 줄여드립니다. 사무실에서 편하게 받아보는 따뜻한 한 끼를 경험하세요.",
+      tags: ["매일 다른 메뉴", "사무실 배송", "소규모 상담 가능"],
+      img: sandwich,
+      badge: "사무실",
     },
   ];
 
@@ -236,10 +230,10 @@ export function LandingPage() {
       icon: UtensilsCrossed,
     },
     {
-      value: "8,200원",
-      label: "음료 포함",
-      sub: "with drink",
-      icon: Coffee,
+      value: "8,000원",
+      label: "샐러드/샌드위치",
+      sub: "salad & sandwich",
+      icon: Heart,
     },
     {
       value: "3일",
@@ -271,18 +265,14 @@ export function LandingPage() {
         }`}
       >
         <div className="max-w-[1320px] mx-auto px-6 lg:px-10 flex items-center justify-between h-16">
-          <a href="#" className="flex items-center gap-2">
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: ORANGE }}
-            >
-              <UtensilsCrossed
-                className="w-4 h-4 text-white"
-                strokeWidth={2.2}
-              />
-            </div>
-            <span className="font-extrabold text-base tracking-tight text-[#1A1A1A]">
-              위드런치
+          <a href="#" className="flex items-center">
+            <ImageWithFallback
+              src={logo}
+              alt="WITH LUNCH 위드런치"
+              className="h-9 w-auto object-contain shrink-0"
+            />
+            <span className="font-extrabold text-base tracking-tight ml-2 text-[#ea5312]">
+              With Lunch
             </span>
           </a>
 
@@ -304,18 +294,33 @@ export function LandingPage() {
           </nav>
 
           <div className="hidden lg:flex items-center gap-3">
+            <div className="relative">
+              <a
+                href={`tel:${PHONE_TEL}`}
+                className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                {PHONE}
+              </a>
+              <span className="absolute -bottom-8 left-0 whitespace-nowrap rounded-full bg-[#FFF4EF] px-2.5 py-1 text-[10px] font-semibold text-[#EB5722] shadow-sm">
+                부재 시 카톡/문자 남겨주세요
+              </span>
+            </div>
+
             <a
-              href={`tel:${MAIN_PHONE_TEL}`}
-              className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors"
+              href={KAKAO_MENU_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 text-[13px] font-bold px-4 py-2 rounded-lg border-2 transition-all hover:bg-[#FFF4EF]"
+              style={{ borderColor: ORANGE, color: ORANGE }}
             >
-              <Phone className="w-3.5 h-3.5" />
-              {MAIN_PHONE}
+              식단표 보러가기 <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
 
             <a
               href={KAKAO_URL}
-              target={KAKAO_URL === "#" ? undefined : "_blank"}
-              rel={KAKAO_URL === "#" ? undefined : "noreferrer"}
+              target="_blank"
+              rel="noreferrer"
               onClick={openKakaoGuide}
               className="flex items-center gap-1.5 text-white text-[13px] font-bold px-4 py-2 rounded-lg transition-all hover:opacity-90"
               style={{ background: ORANGE }}
@@ -352,7 +357,7 @@ export function LandingPage() {
 
             <div className="grid grid-cols-2 gap-2">
               <a
-                href={`tel:${MAIN_PHONE_TEL}`}
+                href={`tel:${PHONE_TEL}`}
                 className="flex justify-center items-center gap-2 text-white text-sm font-bold py-3 rounded-xl"
                 style={{ background: ORANGE }}
                 onClick={() => setNavOpen(false)}
@@ -361,8 +366,8 @@ export function LandingPage() {
               </a>
               <a
                 href={KAKAO_URL}
-                target={KAKAO_URL === "#" ? undefined : "_blank"}
-                rel={KAKAO_URL === "#" ? undefined : "noreferrer"}
+                target="_blank"
+                rel="noreferrer"
                 onClick={(e) => {
                   setNavOpen(false);
                   openKakaoGuide(e);
@@ -372,6 +377,16 @@ export function LandingPage() {
                 카톡문의
               </a>
             </div>
+            <a
+              href={KAKAO_MENU_URL}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setNavOpen(false)}
+              className="flex justify-center items-center gap-2 text-sm font-bold py-3 rounded-xl border-2"
+              style={{ borderColor: ORANGE, color: ORANGE }}
+            >
+              식단표 보러가기 <ArrowUpRight className="w-4 h-4" />
+            </a>
           </div>
         )}
       </header>
@@ -405,25 +420,21 @@ export function LandingPage() {
                 className="w-1.5 h-1.5 rounded-full"
                 style={{ background: ORANGE }}
               />
-              도시락 8,000원 · 음료 포함 8,200원
+              도시락 8,000원 · 샐러드/샌드위치 8,000원
             </div>
 
             <h1 className="text-[2.45rem] sm:text-[2.75rem] lg:text-[2.3rem] xl:text-[2.6rem] 2xl:text-[3rem] font-extrabold text-white leading-[1.08] tracking-[-0.03em] mb-4 xl:mb-5 2xl:mb-6">
-              오늘 점심 뭐 먹지?
+              오늘 점심은
               <br />
-              <span style={{ color: ORANGE }}>그 고민,</span>
-              <br />
-              위드런치가
-              <br />
-              끝내드릴게요
+              <span style={{ color: ORANGE }}>밖에 나가지 않아도 됩니다.</span>
             </h1>
 
             <p className="text-white/55 text-[15px] xl:text-[16px] 2xl:text-[17px] leading-relaxed mb-5 xl:mb-6 2xl:mb-8 font-normal">
-              병원, 사무실, 매장에서 바쁜 점심시간마다
+              병원, 공장, 사무실까지.
               <br className="hidden lg:block" />
-              밖에 나가고 줄 서는 시간을 줄여드립니다.
+              매일 문 앞으로 배송되는 점심으로
               <br className="hidden lg:block" />
-              부담 없는 가격으로 매일 다른 점심을 받아보세요.
+              바쁜 점심시간을 아껴보세요.
             </p>
 
             <div className="bg-white/[0.06] border border-white/[0.1] rounded-2xl p-4 2xl:p-5 mb-5 xl:mb-6 2xl:mb-8 transition-all duration-500 slide-up">
@@ -466,32 +477,46 @@ export function LandingPage() {
             </div>
 
             <div className="flex flex-wrap gap-3 mb-6 xl:mb-7 2xl:mb-12">
-              <a
-                href={`tel:${MAIN_PHONE_TEL}`}
-                className="flex items-center gap-2 text-white font-bold text-sm px-5 2xl:px-6 py-3 2xl:py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
-                style={{
-                  background: ORANGE,
-                  boxShadow: `0 8px 24px ${ORANGE}50`,
-                }}
-              >
-                전화로 바로 문의 <Phone className="w-4 h-4" />
-              </a>
+              <div className="relative">
+                <a
+                  href={`tel:${PHONE_TEL}`}
+                  className="flex items-center gap-2 text-white font-bold text-sm px-5 2xl:px-6 py-3 2xl:py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg"
+                  style={{
+                    background: ORANGE,
+                    boxShadow: `0 8px 24px ${ORANGE}50`,
+                  }}
+                >
+                  전화로 바로 문의 <Phone className="w-4 h-4" />
+                </a>
+                <span className="absolute -bottom-9 left-0 rounded-2xl bg-white px-3 py-1.5 text-[11px] font-semibold text-[#1A1A1A]/70 shadow-md after:content-[''] after:absolute after:-top-1.5 after:left-6 after:h-3 after:w-3 after:rotate-45 after:bg-white">
+                  부재 시 카톡/문자 남겨주시면 확인 후 연락드려요
+                </span>
+              </div>
 
               <a
                 href={KAKAO_URL}
-                target={KAKAO_URL === "#" ? undefined : "_blank"}
-                rel={KAKAO_URL === "#" ? undefined : "noreferrer"}
+                target="_blank"
+                rel="noreferrer"
                 onClick={openKakaoGuide}
                 className="flex items-center gap-2 font-bold text-sm px-5 2xl:px-6 py-3 2xl:py-3.5 rounded-xl bg-[#FFE812] text-black transition-all hover:-translate-y-0.5"
               >
                 카카오톡 문의 <MessageCircle className="w-4 h-4" />
+              </a>
+
+              <a
+                href={KAKAO_MENU_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 text-white/80 font-semibold text-sm px-5 2xl:px-6 py-3 2xl:py-3.5 rounded-xl border border-white/15 hover:border-white/30 transition-all"
+              >
+                식단표 보러가기 <ArrowUpRight className="w-4 h-4" />
               </a>
             </div>
 
             <div className="grid grid-cols-3 gap-px bg-white/[0.08] rounded-2xl overflow-hidden">
               {[
                 { v: "8,000원", l: "도시락", icon: UtensilsCrossed },
-                { v: "8,200원", l: "음료 포함", icon: Coffee },
+                { v: "8,000원", l: "샐러드/샌드위치", icon: Heart },
                 { v: "3일", l: "쿠폰 체험", icon: Gift },
               ].map(({ v, l, icon: Icon }) => (
                 <div
@@ -550,7 +575,9 @@ export function LandingPage() {
             <p className="text-[#1A1A1A] font-extrabold text-2xl leading-tight">
               8,000원
             </p>
-            <p className="text-[#1A1A1A]/45 text-xs mt-1">음료 포함 8,200원</p>
+            <p className="text-[#1A1A1A]/45 text-xs mt-1">
+              샐러드/샌드위치 8,000원
+            </p>
           </div>
 
           <div className="absolute bottom-6 xl:bottom-8 right-6 xl:right-8 bg-white rounded-2xl p-4 xl:p-5 shadow-2xl max-w-[230px]">
@@ -566,10 +593,16 @@ export function LandingPage() {
               </span>
             </div>
             <p className="text-[#1A1A1A] font-extrabold text-lg leading-tight mb-1">
-              {MAIN_PHONE}
+              {PHONE}
             </p>
-            <p className="text-[#1A1A1A]/45 text-xs leading-relaxed mb-3">
+            <p className="text-[#1A1A1A]/45 text-xs leading-relaxed mb-2">
               지역·인원·시작일을 바로 확인해드려요.
+            </p>
+            <p
+              className="inline-flex rounded-full bg-[#FFF4EF] px-2.5 py-1 text-[10px] font-semibold mb-3"
+              style={{ color: ORANGE }}
+            >
+              부재 시 카톡/문자 남겨주세요
             </p>
             <div className="flex items-center gap-1.5">
               <div className="flex-1 h-1.5 rounded-full bg-[#F0F0F0]">
@@ -604,7 +637,7 @@ export function LandingPage() {
               </h2>
             </div>
             <a
-              href={`tel:${MAIN_PHONE_TEL}`}
+              href={`tel:${PHONE_TEL}`}
               className="shrink-0 inline-flex items-center gap-2 text-sm font-bold px-5 py-3 rounded-xl border-2 hover:text-white transition-all"
               style={{ borderColor: ORANGE, color: ORANGE }}
               onMouseEnter={(e) => {
@@ -749,7 +782,7 @@ export function LandingPage() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               {
                 label: "든든한 도시락",
@@ -759,24 +792,23 @@ export function LandingPage() {
                 icon: UtensilsCrossed,
               },
               {
-                label: "음료 포함 구성",
-                sub: "도시락 + 음료 8,200원",
+                label: "샐러드/샌드위치",
+                sub: "가벼운 점심 8,000원",
                 img: saladBowl,
                 accent: "02",
-                icon: Coffee,
+                icon: Heart,
               },
               {
                 label: "간편 점심 선택",
-                sub: "병원·직장·매장 점심 상담 가능",
+                sub: "병원·공장·창고·사무실 상담 가능",
                 img: sandwich,
                 accent: "03",
-                icon: Heart,
+                icon: Coffee,
               },
             ].map(({ label, sub, img, accent, icon: Icon }) => (
               <div
                 key={label}
-                className="group relative rounded-2xl overflow-hidden cursor-pointer"
-                style={{ aspectRatio: "4/5" }}
+                className="group relative rounded-2xl overflow-hidden cursor-pointer h-[220px] sm:h-[280px] lg:h-auto lg:aspect-[4/5] lg:max-h-[520px]"
               >
                 <ImageWithFallback
                   src={img}
@@ -898,13 +930,13 @@ export function LandingPage() {
 
               <p className="text-white/50 text-[15px] leading-relaxed max-w-xl mb-8">
                 위드런치는 복잡한 가격표보다 바로 이해되는 가격을 안내합니다.
-                기본 도시락은 8,000원, 음료 포함 구성은 8,200원입니다.
+                기본 도시락은 8,000원, 샐러드/샌드위치도 8,000원입니다.
               </p>
 
               <div className="grid sm:grid-cols-3 gap-3">
                 {[
                   { icon: UtensilsCrossed, text: "기본 도시락 8,000원" },
-                  { icon: Coffee, text: "음료 포함 8,200원" },
+                  { icon: Heart, text: "샐러드/샌드위치 8,000원" },
                   { icon: Phone, text: "전화·카톡 바로 상담" },
                 ].map(({ icon: Icon, text }) => (
                   <div
@@ -945,7 +977,7 @@ export function LandingPage() {
                   8,000원
                 </p>
                 <p className="text-[#1A1A1A]/45 text-sm">
-                  병원·직장·매장 점심 도시락 상담 가능
+                  병원·공장·창고·사무실 점심 도시락 상담 가능
                 </p>
               </div>
 
@@ -956,20 +988,20 @@ export function LandingPage() {
                 <div className="flex items-center justify-between mb-8">
                   <div>
                     <p className="text-white/70 text-[11px] font-bold tracking-[0.14em] uppercase mb-2">
-                      음료 포함
+                      가벼운 구성
                     </p>
                     <h3 className="text-white font-extrabold text-2xl">
-                      도시락 + 음료
+                      샐러드/샌드위치
                     </h3>
                   </div>
-                  <Coffee className="w-8 h-8 text-white/80" />
+                  <Heart className="w-8 h-8 text-white/80" />
                 </div>
 
                 <p className="text-white text-5xl font-extrabold tracking-tight mb-3">
-                  8,200원
+                  8,000원
                 </p>
                 <p className="text-white/70 text-sm">
-                  음료까지 함께 필요한 곳에 추천드려요.
+                  가볍게 먹고 싶은 날에도 부담 없이 선택할 수 있어요.
                 </p>
               </div>
             </div>
@@ -1034,27 +1066,9 @@ export function LandingPage() {
                   ))}
               </div>
 
-              <blockquote className="text-[#1A1A1A]/75 text-lg leading-relaxed mb-8 font-normal">
+              <blockquote className="text-[#1A1A1A]/75 text-lg leading-relaxed font-normal min-h-[120px]">
                 “{testimonials[current].quote}”
               </blockquote>
-
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white text-sm"
-                  style={{ background: ORANGE }}
-                >
-                  {testimonials[current].author[0]}
-                </div>
-                <div>
-                  <p className="text-[#1A1A1A] font-bold text-sm">
-                    {testimonials[current].author}
-                  </p>
-                  <p className="text-[#1A1A1A]/40 text-xs">
-                    {testimonials[current].role} ·{" "}
-                    {testimonials[current].company}
-                  </p>
-                </div>
-              </div>
 
               <div className="absolute bottom-8 right-8 flex items-center gap-2">
                 <button
@@ -1089,7 +1103,7 @@ export function LandingPage() {
                 </p>
               </div>
               <a
-                href={`tel:${MAIN_PHONE_TEL}`}
+                href={`tel:${PHONE_TEL}`}
                 className="mt-8 flex items-center justify-between bg-white rounded-xl px-5 py-4 font-bold text-sm hover:opacity-95 transition-opacity"
                 style={{ color: ORANGE }}
               >
@@ -1149,14 +1163,14 @@ export function LandingPage() {
                     desc: "기본 도시락은 8,000원으로 부담 없이 점심을 준비할 수 있어요.",
                   },
                   {
-                    icon: Coffee,
-                    title: "음료 포함 8,200원",
-                    desc: "음료까지 함께 필요한 곳은 8,200원 구성으로 안내드립니다.",
+                    icon: Heart,
+                    title: "샐러드/샌드위치 8,000원",
+                    desc: "가볍게 먹고 싶은 날에도 8,000원으로 부담 없이 선택할 수 있어요.",
                   },
                   {
                     icon: MapPin,
                     title: "배송 가능 지역 확인",
-                    desc: "병원, 사무실, 매장 위치를 알려주시면 가능 여부를 바로 안내드립니다.",
+                    desc: "병원, 공장, 창고, 사무실 위치를 알려주시면 가능 여부를 바로 안내드립니다.",
                   },
                 ].map(({ icon: Icon, title, desc }) => (
                   <div key={title} className="flex gap-5 py-6">
@@ -1176,28 +1190,6 @@ export function LandingPage() {
                     </div>
                   </div>
                 ))}
-              </div>
-
-              <div className="mt-10 rounded-2xl overflow-hidden h-48 relative">
-                <ImageWithFallback
-                  src={brochureFood}
-                  alt="위드런치 도시락 서비스"
-                  className="w-full h-full object-cover"
-                />
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(to right, rgba(235,87,34,0.5), transparent)",
-                  }}
-                />
-                <div className="absolute left-6 bottom-6">
-                  <p className="text-white font-extrabold text-lg leading-tight">
-                    바쁜 점심시간,
-                    <br />
-                    도시락이 도착합니다
-                  </p>
-                </div>
               </div>
             </div>
 
@@ -1238,22 +1230,22 @@ export function LandingPage() {
                 </div>
 
                 <div className="bg-white rounded-2xl p-5 border border-black/[0.06]">
-                  <Coffee className="w-5 h-5 mb-3" style={{ color: ORANGE }} />
+                  <Heart className="w-5 h-5 mb-3" style={{ color: ORANGE }} />
                   <p className="text-[11px] text-[#1A1A1A]/40 font-bold mb-1">
-                    음료 포함
+                    샐러드/샌드위치
                   </p>
                   <p
                     className="text-2xl font-extrabold"
                     style={{ color: ORANGE }}
                   >
-                    8,200원
+                    8,000원
                   </p>
                 </div>
               </div>
 
               <div className="space-y-3 mb-8">
                 <a
-                  href={`tel:${MAIN_PHONE_TEL}`}
+                  href={`tel:${PHONE_TEL}`}
                   className="group flex items-center justify-between w-full rounded-2xl bg-white border border-black/[0.06] p-5 hover:-translate-y-0.5 transition-all shadow-sm"
                 >
                   <div className="flex items-center gap-4">
@@ -1265,36 +1257,16 @@ export function LandingPage() {
                     </div>
                     <div>
                       <p className="text-[11px] font-bold text-[#1A1A1A]/40 uppercase tracking-wider mb-0.5">
-                        대표번호
+                        전화 문의
                       </p>
                       <p className="text-xl font-extrabold text-[#1A1A1A]">
-                        {MAIN_PHONE}
+                        {PHONE}
                       </p>
-                    </div>
-                  </div>
-                  <ArrowRight
-                    className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                    style={{ color: ORANGE }}
-                  />
-                </a>
-
-                <a
-                  href={`tel:${MOBILE_PHONE_TEL}`}
-                  className="group flex items-center justify-between w-full rounded-2xl bg-white border border-black/[0.06] p-5 hover:-translate-y-0.5 transition-all shadow-sm"
-                >
-                  <div className="flex items-center gap-4">
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center"
-                      style={{ background: `${ORANGE}15` }}
-                    >
-                      <Phone className="w-5 h-5" style={{ color: ORANGE }} />
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-bold text-[#1A1A1A]/40 uppercase tracking-wider mb-0.5">
-                        휴대폰 문의
-                      </p>
-                      <p className="text-xl font-extrabold text-[#1A1A1A]">
-                        {MOBILE_PHONE}
+                      <p
+                        className="text-[11px] font-semibold mt-1"
+                        style={{ color: ORANGE }}
+                      >
+                        부재 시 카톡/문자 남겨주세요
                       </p>
                     </div>
                   </div>
@@ -1306,8 +1278,8 @@ export function LandingPage() {
 
                 <a
                   href={KAKAO_URL}
-                  target={KAKAO_URL === "#" ? undefined : "_blank"}
-                  rel={KAKAO_URL === "#" ? undefined : "noreferrer"}
+                  target="_blank"
+                  rel="noreferrer"
                   onClick={openKakaoGuide}
                   className="group flex items-center justify-between w-full rounded-2xl border border-black/[0.06] p-5 hover:-translate-y-0.5 transition-all shadow-sm"
                   style={{ background: "#FFE812" }}
@@ -1321,11 +1293,43 @@ export function LandingPage() {
                         카카오톡 문의
                       </p>
                       <p className="text-xl font-extrabold text-black">
-                        {KAKAO_ID}
+                        채널 바로가기
                       </p>
                     </div>
                   </div>
                   <ArrowRight className="w-5 h-5 text-black group-hover:translate-x-1 transition-transform" />
+                </a>
+
+                <a
+                  href={KAKAO_MENU_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center justify-between w-full rounded-2xl border-2 p-5 hover:-translate-y-0.5 transition-all shadow-sm bg-white"
+                  style={{ borderColor: ORANGE }}
+                >
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center"
+                      style={{ background: `${ORANGE}15` }}
+                    >
+                      <UtensilsCrossed
+                        className="w-5 h-5"
+                        style={{ color: ORANGE }}
+                      />
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-bold text-[#1A1A1A]/40 uppercase tracking-wider mb-0.5">
+                        식단표
+                      </p>
+                      <p className="text-xl font-extrabold text-[#1A1A1A]">
+                        식단표 보러가기
+                      </p>
+                    </div>
+                  </div>
+                  <ArrowUpRight
+                    className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                    style={{ color: ORANGE }}
+                  />
                 </a>
               </div>
 
@@ -1342,7 +1346,7 @@ export function LandingPage() {
                     "배송 받을 지역",
                     "하루 이용 인원",
                     "원하는 시작일",
-                    "음료 포함 여부",
+                    "샐러드/샌드위치 여부",
                   ].map((item) => (
                     <div
                       key={item}
@@ -1371,23 +1375,16 @@ export function LandingPage() {
         <div className="max-w-[1320px] mx-auto px-6 lg:px-10">
           <div className="grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr] gap-10 pb-12 border-b border-white/[0.08]">
             <div className="col-span-2 lg:col-span-1">
-              <div className="flex items-center gap-2 mb-5">
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center"
-                  style={{ background: ORANGE }}
-                >
-                  <UtensilsCrossed
-                    className="w-4 h-4 text-white"
-                    strokeWidth={2.2}
-                  />
-                </div>
-                <span className="font-extrabold text-white text-base">
-                  위드런치
-                </span>
+              <div className="mb-5">
+                <ImageWithFallback
+                  src={logo}
+                  alt="WITH LUNCH 위드런치"
+                  className="h-10 w-auto object-contain"
+                />
               </div>
               <p className="text-white/35 text-[13px] leading-relaxed mb-6 max-w-[230px]">
-                병원, 직장, 매장의 점심시간을 더 편하게 만들어주는 도시락 배송
-                서비스.
+                병원, 공장, 창고, 사무실의 점심시간을 더 편하게 만들어주는
+                도시락 배송 서비스.
               </p>
               <div className="flex gap-2">
                 {[Instagram, Youtube].map((Icon, i) => (
@@ -1407,10 +1404,10 @@ export function LandingPage() {
                 title: "서비스",
                 items: [
                   "도시락 8,000원",
-                  "음료 포함 8,200원",
+                  "샐러드/샌드위치 8,000원",
                   "병원 점심 도시락",
-                  "직장 점심 도시락",
-                  "가게·매장 도시락",
+                  "공장 점심 도시락",
+                  "창고·사무실 도시락",
                 ],
               },
               {
@@ -1426,10 +1423,10 @@ export function LandingPage() {
               {
                 title: "연락처",
                 items: [
-                  `대표 ${MAIN_PHONE}`,
-                  MOBILE_PHONE,
-                  `카카오톡: ${KAKAO_ID}`,
-                  "병원·직장·매장 점심 배송",
+                  PHONE,
+                  "카카오톡 채널 문의",
+                  "식단표 보러가기",
+                  "병원·공장·창고·사무실 배송",
                 ],
               },
             ].map(({ title, items }) => (
@@ -1475,7 +1472,7 @@ export function LandingPage() {
       {/* FLOATING CONTACT BUTTON */}
       <div className="fixed right-5 bottom-5 z-50 flex flex-col gap-2">
         <a
-          href={`tel:${MAIN_PHONE_TEL}`}
+          href={`tel:${PHONE_TEL}`}
           className="bg-white rounded-2xl shadow-2xl border border-black/[0.06] px-4 py-3 flex items-center gap-3 hover:-translate-y-1 transition-all duration-300"
         >
           <div
@@ -1489,7 +1486,10 @@ export function LandingPage() {
               전화 문의
             </p>
             <p className="text-[11px] font-bold" style={{ color: ORANGE }}>
-              {MAIN_PHONE}
+              {PHONE}
+            </p>
+            <p className="text-[10px] font-semibold text-[#1A1A1A]/45 mt-0.5">
+              부재 시 카톡/문자
             </p>
           </div>
         </a>
@@ -1547,14 +1547,14 @@ export function LandingPage() {
             </h3>
 
             <p className="text-[#1A1A1A]/55 text-sm leading-relaxed mb-6">
-              음료 포함은 8,200원입니다. 매일 점심 메뉴 고르느라 시간을 쓰고
-              있다면, 전화나 카카오톡으로 바로 문의해보세요.
+              샐러드/샌드위치도 8,000원입니다. 매일 점심 메뉴 고르느라 시간을
+              쓰고 있다면, 전화나 카카오톡으로 바로 문의해보세요.
             </p>
 
             <div className="bg-[#F8F7F5] rounded-2xl p-4 mb-6 space-y-3">
               {[
                 { icon: UtensilsCrossed, text: "도시락 8,000원" },
-                { icon: Coffee, text: "음료 포함 8,200원" },
+                { icon: Heart, text: "샐러드/샌드위치 8,000원" },
                 { icon: Truck, text: "배송 가능 지역 바로 확인" },
               ].map(({ icon: Icon, text }) => (
                 <div
@@ -1569,7 +1569,7 @@ export function LandingPage() {
 
             <div className="grid grid-cols-2 gap-2">
               <a
-                href={`tel:${MAIN_PHONE_TEL}`}
+                href={`tel:${PHONE_TEL}`}
                 onClick={() => setCouponOpen(false)}
                 className="flex items-center justify-center gap-2 text-white font-bold py-4 rounded-xl transition-opacity hover:opacity-90"
                 style={{ background: ORANGE }}
@@ -1580,7 +1580,7 @@ export function LandingPage() {
               <button
                 onClick={() => {
                   setCouponOpen(false);
-                  setKakaoGuideOpen(true);
+                  openKakaoGuide();
                 }}
                 className="flex items-center justify-center gap-2 font-bold py-4 rounded-xl transition-opacity hover:opacity-90 bg-[#FFE812] text-black"
               >
@@ -1589,7 +1589,7 @@ export function LandingPage() {
             </div>
 
             <p className="text-center text-[11px] text-[#1A1A1A]/35 mt-4">
-              대표번호 {MAIN_PHONE} · 카카오톡 {KAKAO_ID}
+              {PHONE} · 부재 시 카톡/문자 남겨주세요
             </p>
 
             <button
@@ -1621,85 +1621,56 @@ export function LandingPage() {
               </div>
 
               <p className="text-[11px] font-bold tracking-[0.14em] uppercase mb-3 text-black/45">
-                카카오톡 문의 안내
+                카카오톡 문의
               </p>
 
               <h3 className="text-2xl font-extrabold text-[#1A1A1A] leading-tight mb-3">
-                카카오톡에서
+                위드런치 카카오톡 채널로
                 <br />
-                <span style={{ color: ORANGE }}>{KAKAO_ID}</span>를 검색해주세요
+                바로 문의하세요
               </h3>
 
               <p className="text-[#1A1A1A]/55 text-sm leading-relaxed mb-6">
-                카카오톡 친구 또는 채널 검색창에 아래 이름을 입력하면 위드런치
-                문의가 가능합니다.
+                아래 QR 코드를 스캔하거나 버튼을 눌러 카카오톡 채널로 이동할 수
+                있습니다.
               </p>
 
-              <div className="bg-[#F8F7F5] rounded-2xl p-5 mb-5 border border-black/[0.05]">
-                <div className="flex items-center gap-3 mb-4">
-                  <Search className="w-5 h-5" style={{ color: ORANGE }} />
-                  <p className="text-sm font-bold text-[#1A1A1A]/55">검색어</p>
-                </div>
-
-                <div className="flex items-center justify-between bg-white rounded-xl px-4 py-4 border border-black/[0.06]">
-                  <p className="text-xl font-extrabold text-[#1A1A1A]">
-                    {KAKAO_ID}
-                  </p>
-                  <button
-                    onClick={copyKakaoId}
-                    className="flex items-center gap-1.5 text-[12px] font-bold px-3 py-2 rounded-lg transition-colors"
-                    style={{
-                      background: copied ? `${ORANGE}18` : "#F2F2F2",
-                      color: copied ? ORANGE : "rgba(26,26,26,0.6)",
-                    }}
-                  >
-                    <Copy className="w-3.5 h-3.5" />
-                    {copied ? "복사됨" : "복사"}
-                  </button>
-                </div>
+              <div className="bg-[#F8F7F5] rounded-2xl p-5 mb-5 border border-black/[0.05] text-center">
+                <ImageWithFallback
+                  src={kakaoQr}
+                  alt="위드런치 카카오톡 채널 QR 코드"
+                  className="mx-auto w-[180px] h-[180px] object-contain rounded-xl bg-white p-2"
+                />
+                <p className="text-[12px] text-[#1A1A1A]/45 mt-3">
+                  스마트폰 카메라로 QR 코드를 스캔해주세요
+                </p>
               </div>
 
-              <div className="space-y-3 mb-6">
-                {[
-                  "카카오톡 실행",
-                  "상단 검색창에서 WithLunch 검색",
-                  "배송 지역·인원·시작일 문의",
-                ].map((item, index) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-3 text-sm text-[#1A1A1A]/65"
-                  >
-                    <div
-                      className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-extrabold text-white shrink-0"
-                      style={{ background: ORANGE }}
-                    >
-                      {index + 1}
-                    </div>
-                    {item}
-                  </div>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2">
                 <a
-                  href={`tel:${MAIN_PHONE_TEL}`}
-                  className="flex items-center justify-center gap-2 text-white font-bold py-4 rounded-xl transition-opacity hover:opacity-90"
-                  style={{ background: ORANGE }}
+                  href={KAKAO_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center gap-2 font-bold py-4 rounded-xl bg-[#FFE812] text-black transition-opacity hover:opacity-90"
                   onClick={() => setKakaoGuideOpen(false)}
                 >
-                  전화하기 <Phone className="w-4 h-4" />
+                  카카오톡 채널 바로가기 <ArrowRight className="w-4 h-4" />
                 </a>
 
-                <button
+                <a
+                  href={KAKAO_MENU_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center gap-2 font-bold py-4 rounded-xl border-2 transition-opacity hover:opacity-90"
+                  style={{ borderColor: ORANGE, color: ORANGE }}
                   onClick={() => setKakaoGuideOpen(false)}
-                  className="flex items-center justify-center gap-2 font-bold py-4 rounded-xl bg-[#111111] text-white transition-opacity hover:opacity-90"
                 >
-                  확인했어요 <CheckCircle2 className="w-4 h-4" />
-                </button>
+                  식단표 보러가기 <ArrowUpRight className="w-4 h-4" />
+                </a>
               </div>
 
               <p className="text-center text-[11px] text-[#1A1A1A]/35 mt-4">
-                대표번호 {MAIN_PHONE} · 휴대폰 {MOBILE_PHONE}
+                {PHONE} · 부재 시 카톡/문자 남겨주세요
               </p>
             </div>
           </div>
