@@ -67,3 +67,12 @@ html {
 .cute-wiggle {
   animation: wiggle 1.4s ease-in-out infinite;
 }
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
