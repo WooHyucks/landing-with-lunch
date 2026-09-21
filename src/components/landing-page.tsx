@@ -50,36 +50,99 @@ const KAKAO_MENU_URL = "https://pf.kakao.com/_JxbgKn/posts";
 
 function useHorizontalSwipe(
   length: number,
+  index: number,
   setIndex: React.Dispatch<React.SetStateAction<number>>,
   enabled: boolean,
-  onSwipe?: () => void,
 ) {
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const axisRef = useRef<"h" | "v" | null>(null);
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
-  return {
-    onTouchStart: (e: React.TouchEvent) => {
-      if (!enabled) return;
-      touchStart.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    onTouchEnd: (e: React.TouchEvent) => {
-      if (!enabled || !touchStart.current) return;
+  const resetTouch = () => {
+    startRef.current = null;
+    axisRef.current = null;
+    setIsDragging(false);
+    setDragX(0);
+  };
 
-      const dx = e.changedTouches[0].clientX - touchStart.current.x;
-      const dy = e.changedTouches[0].clientY - touchStart.current.y;
-      touchStart.current = null;
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (!enabled) return;
 
-      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+    startRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      time: Date.now(),
+    };
+    axisRef.current = null;
+    setIsDragging(true);
+    setDragX(0);
+  };
 
-      if (dx < 0) {
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!enabled || !startRef.current) return;
+
+    const dx = e.touches[0].clientX - startRef.current.x;
+    const dy = e.touches[0].clientY - startRef.current.y;
+
+    if (!axisRef.current) {
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      axisRef.current = Math.abs(dx) > Math.abs(dy) ? "h" : "v";
+    }
+
+    if (axisRef.current !== "h") return;
+
+    let next = dx;
+    if ((index === 0 && dx > 0) || (index === length - 1 && dx < 0)) {
+      next = dx * 0.3;
+    }
+
+    setDragX(next);
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!enabled || !startRef.current) {
+      resetTouch();
+      return;
+    }
+
+    const dx = e.changedTouches[0].clientX - startRef.current.x;
+    const dt = Math.max(Date.now() - startRef.current.time, 1);
+    const velocity = dx / dt;
+    const width = containerRef.current?.offsetWidth ?? 320;
+    const isHorizontal =
+      axisRef.current === "h" ||
+      (Math.abs(dx) > Math.abs(e.changedTouches[0].clientY - startRef.current.y) &&
+        Math.abs(dx) > 12);
+
+    if (isHorizontal) {
+      const passedDistance = Math.abs(dx) > width * 0.14;
+      const passedVelocity = Math.abs(velocity) > 0.28;
+
+      if ((passedDistance || passedVelocity) && dx < 0) {
         setIndex((i) => (i + 1) % length);
-      } else {
+      } else if ((passedDistance || passedVelocity) && dx > 0) {
         setIndex((i) => (i - 1 + length) % length);
       }
+    }
 
-      onSwipe?.();
+    resetTouch();
+  };
+
+  return {
+    containerRef,
+    slideStyle: {
+      transform: `translateX(calc(-${index * 100}% + ${dragX}px))`,
+      transition: isDragging
+        ? "none"
+        : "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+    } satisfies React.CSSProperties,
+    handlers: {
+      onTouchStart,
+      onTouchMove,
+      onTouchEnd,
+      onTouchCancel: resetTouch,
     },
   };
 }
@@ -136,8 +199,6 @@ export function LandingPage() {
   const [kakaoGuideOpen, setKakaoGuideOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 10);
     fn();
@@ -169,34 +230,8 @@ export function LandingPage() {
     return () => clearTimeout(modalTimer);
   }, []);
 
-  useEffect(() => {
-    timerRef.current = setInterval(
-      () => setCurrent((p) => (p + 1) % testimonials.length),
-      5000,
-    );
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
-    const painTimer = setInterval(() => {
-      setPainIndex((p) => (p + 1) % lunchPains.length);
-    }, 2800);
-
-    return () => clearInterval(painTimer);
-  }, []);
-
   const go = (d: 1 | -1) => {
-    if (timerRef.current) clearInterval(timerRef.current);
-
     setCurrent((p) => (p + d + testimonials.length) % testimonials.length);
-
-    timerRef.current = setInterval(
-      () => setCurrent((p) => (p + 1) % testimonials.length),
-      5000,
-    );
   };
 
   const closeCouponToday = () => {
@@ -285,29 +320,23 @@ export function LandingPage() {
     },
   ];
 
-  const resetTestimonialTimer = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(
-      () => setCurrent((p) => (p + 1) % testimonials.length),
-      5000,
-    );
-  };
-
   const painSwipe = useHorizontalSwipe(
     lunchPains.length,
+    painIndex,
     setPainIndex,
     !isDesktop,
   );
   const servicesSwipe = useHorizontalSwipe(
     services.length,
+    activeTab,
     setActiveTab,
     !isDesktop,
   );
   const testimonialSwipe = useHorizontalSwipe(
     testimonials.length,
+    current,
     setCurrent,
     !isDesktop,
-    resetTestimonialTimer,
   );
 
   return (
@@ -465,32 +494,46 @@ export function LandingPage() {
             </p>
 
             <div
-              className="bg-white/[0.06] border border-white/[0.1] rounded-2xl p-4 2xl:p-5 mb-7 lg:mb-6 2xl:mb-8 transition-all duration-500 slide-up touch-pan-y"
-              {...painSwipe}
+              ref={painSwipe.containerRef}
+              className="bg-white/[0.06] border border-white/[0.1] rounded-2xl mb-7 lg:mb-6 2xl:mb-8 overflow-hidden touch-pan-y"
+              {...painSwipe.handlers}
             >
-              <div className="flex items-start gap-3 2xl:gap-4">
-                <div className="w-11 h-11 2xl:w-12 2xl:h-12 rounded-2xl bg-white/[0.08] flex items-center justify-center text-2xl shrink-0">
-                  {lunchPains[painIndex].emoji}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    {(() => {
-                      const Icon = lunchPains[painIndex].icon;
-                      return (
-                        <Icon className="w-4 h-4" style={{ color: ORANGE }} />
-                      );
-                    })()}
-                    <p className="text-white font-extrabold text-[15px] 2xl:text-base">
-                      {lunchPains[painIndex].title}
-                    </p>
-                  </div>
-                  <p className="text-white/45 text-[13px] 2xl:text-sm leading-relaxed">
-                    {lunchPains[painIndex].desc}
-                  </p>
+              <div className="overflow-hidden">
+                <div className="flex w-full" style={painSwipe.slideStyle}>
+                  {lunchPains.map((pain) => {
+                    const Icon = pain.icon;
+
+                    return (
+                      <div
+                        key={pain.title}
+                        className="w-full shrink-0 px-4 pt-4 2xl:px-5 2xl:pt-5"
+                      >
+                        <div className="flex items-start gap-3 2xl:gap-4">
+                          <div className="w-11 h-11 2xl:w-12 2xl:h-12 rounded-2xl bg-white/[0.08] flex items-center justify-center text-2xl shrink-0">
+                            {pain.emoji}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <Icon
+                                className="w-4 h-4"
+                                style={{ color: ORANGE }}
+                              />
+                              <p className="text-white font-extrabold text-[15px] 2xl:text-base">
+                                {pain.title}
+                              </p>
+                            </div>
+                            <p className="text-white/45 text-[13px] 2xl:text-sm leading-relaxed">
+                              {pain.desc}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              <div className="flex gap-1.5 mt-4">
+              <div className="flex gap-1.5 mt-4 px-4 pb-4">
                 {lunchPains.map((_, i) => (
                   <button
                     key={i}
@@ -612,7 +655,10 @@ export function LandingPage() {
             </p>
           </div>
 
-          <div className="absolute bottom-6 xl:bottom-8 right-6 xl:right-8 bg-white rounded-2xl p-4 xl:p-5 shadow-2xl max-w-[230px]">
+          <a
+            href={`tel:${CALL_PHONE_TEL}`}
+            className="absolute bottom-6 xl:bottom-8 right-6 xl:right-8 bg-white rounded-2xl p-4 xl:p-5 shadow-2xl max-w-[230px] block transition-transform active:scale-[0.98] hover:shadow-[0_20px_50px_rgba(0,0,0,0.18)]"
+          >
             <div className="flex items-center gap-2 mb-3">
               <div
                 className="w-7 h-7 rounded-lg flex items-center justify-center"
@@ -647,7 +693,7 @@ export function LandingPage() {
                 상담가능
               </span>
             </div>
-          </div>
+          </a>
         </div>
       </section>
 
@@ -711,10 +757,11 @@ export function LandingPage() {
           </div>
 
           <div
+            ref={servicesSwipe.containerRef}
             className="grid lg:grid-cols-[1fr_1.15fr] gap-8 lg:gap-12 items-center touch-pan-y"
-            {...servicesSwipe}
+            {...servicesSwipe.handlers}
           >
-            <div>
+            <div key={activeTab} className="slide-up">
               <div
                 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded mb-6"
                 style={{ background: `${ORANGE}15`, color: ORANGE }}
@@ -1092,7 +1139,6 @@ export function LandingPage() {
               <div className="order-1">
                 <div
                   className="bg-white border border-black/[0.06] rounded-3xl p-8 lg:p-10 relative shadow-sm touch-pan-y"
-                  {...testimonialSwipe}
                 >
                   <div className="flex gap-1 mb-6">
                     {Array(5)
@@ -1106,7 +1152,24 @@ export function LandingPage() {
                       ))}
                   </div>
 
-                  <blockquote className="text-[#1A1A1A]/75 text-lg leading-relaxed font-normal min-h-[120px] pb-12 lg:pb-0">
+                  <div
+                    ref={testimonialSwipe.containerRef}
+                    className="overflow-hidden lg:hidden"
+                    {...testimonialSwipe.handlers}
+                  >
+                    <div className="flex w-full" style={testimonialSwipe.slideStyle}>
+                      {testimonials.map((t) => (
+                        <blockquote
+                          key={t.quote}
+                          className="w-full shrink-0 text-[#1A1A1A]/75 text-lg leading-relaxed font-normal min-h-[120px]"
+                        >
+                          “{t.quote}”
+                        </blockquote>
+                      ))}
+                    </div>
+                  </div>
+
+                  <blockquote className="hidden lg:block text-[#1A1A1A]/75 text-lg leading-relaxed font-normal min-h-[120px] pb-12 lg:pb-0">
                     “{testimonials[current].quote}”
                   </blockquote>
 
