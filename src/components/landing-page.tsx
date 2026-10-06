@@ -46,7 +46,31 @@ const DISPLAY_PHONE = "1577-8519";
 const CALL_PHONE = "010-5507-2905";
 const CALL_PHONE_TEL = "01055072905";
 const KAKAO_URL = "https://pf.kakao.com/_JxbgKn";
-const KAKAO_MENU_URL = "https://pf.kakao.com/_JxbgKn/posts";
+const MENU_URL =
+  "https://map.naver.com/p/entry/place/1927474710?placePath=%2Ffeed%3Fentry%3Dplt%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202610062152%26locale%3Dko%26svcName%3Dmap_pcv5&searchType=place&lng=127.1488436&lat=37.5854337&c=15.00,0,0,0,dh";
+
+function footerItemHref(item: string): string {
+  if (item === "식단표 보러가기") return MENU_URL;
+  if (item === "카카오톡 문의" || item === "카카오톡 채널 문의") {
+    return KAKAO_URL;
+  }
+  if (
+    item === "전화 문의" ||
+    item.startsWith("대표번호") ||
+    item.startsWith("고객센터")
+  ) {
+    return `tel:${CALL_PHONE_TEL}`;
+  }
+  return "#contact";
+}
+
+function footerItemOpensNewTab(item: string): boolean {
+  return (
+    item === "식단표 보러가기" ||
+    item === "카카오톡 문의" ||
+    item === "카카오톡 채널 문의"
+  );
+}
 
 function useHorizontalSwipe(
   length: number,
@@ -393,7 +417,7 @@ export function LandingPage() {
             </a>
 
             <a
-              href={KAKAO_MENU_URL}
+              href={MENU_URL}
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-1.5 text-[13px] font-bold px-4 py-2 rounded-lg border-2 transition-all hover:bg-[#FFF4EF]"
@@ -568,7 +592,7 @@ export function LandingPage() {
               </div>
 
               <a
-                href={KAKAO_MENU_URL}
+                href={MENU_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-2 font-bold text-sm px-5 2xl:px-6 py-3 2xl:py-3.5 rounded-xl border-2 transition-all hover:-translate-y-0.5"
@@ -1427,7 +1451,7 @@ export function LandingPage() {
                 </a>
 
                 <a
-                  href={KAKAO_MENU_URL}
+                  href={MENU_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="group flex items-center justify-between w-full rounded-2xl border-2 p-5 hover:-translate-y-0.5 transition-all shadow-sm bg-white"
@@ -1517,7 +1541,12 @@ export function LandingPage() {
                   고객센터
                 </p>
                 <p className="text-white font-extrabold text-lg mb-1">
-                  대표번호 {DISPLAY_PHONE}
+                  <a
+                    href={`tel:${CALL_PHONE_TEL}`}
+                    className="hover:text-white/90 transition-colors"
+                  >
+                    대표번호 {DISPLAY_PHONE}
+                  </a>
                 </p>
                 <p className="text-white/45 text-[12px] leading-relaxed">
                   가맹·제휴·단체 문의도 대표번호로 접수해드립니다.
@@ -1574,8 +1603,11 @@ export function LandingPage() {
                   {items.map((item) => (
                     <li key={item}>
                       <a
-                        href="#contact"
+                        href={footerItemHref(item)}
                         className="text-white/35 text-[13px] hover:text-white/70 transition-colors"
+                        {...(footerItemOpensNewTab(item)
+                          ? { target: "_blank", rel: "noreferrer" }
+                          : {})}
                       >
                         {item}
                       </a>
@@ -1640,7 +1672,7 @@ export function LandingPage() {
             </a>
 
             <a
-              href={KAKAO_MENU_URL}
+              href={MENU_URL}
               target="_blank"
               rel="noreferrer"
               className="flex flex-col items-center justify-center gap-1.5 py-3.5 px-2 text-white active:bg-white/10 transition-colors"
@@ -1844,7 +1876,7 @@ export function LandingPage() {
                 </a>
 
                 <a
-                  href={KAKAO_MENU_URL}
+                  href={MENU_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center justify-center gap-2 font-bold py-4 rounded-xl border-2 transition-opacity hover:opacity-90"
