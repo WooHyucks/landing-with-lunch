@@ -1,22 +1,61 @@
 import type { Metadata } from "next";
+import { HOME_DESCRIPTION, HOME_TITLE, KAKAO_URL, SITE_NAME, SITE_NAME_EN, SITE_URL, DISPLAY_PHONE } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "위드런치 | 점심 도시락 정기배송",
-  description:
-    "병원, 공장, 창고, 사무실의 점심시간을 더 편하게 만들어주는 도시락 배송 서비스. 매일 다른 메뉴를 정해진 시간에 받아보세요.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: HOME_TITLE,
+    template: "%s",
+  },
+  description: HOME_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: "/favicon.png",
     apple: "/favicon.png",
   },
   openGraph: {
-    title: "위드런치 | 점심 도시락 정기배송",
-    description:
-      "오늘 점심 뭐 먹지? 그 고민, 위드런치가 끝내드릴게요.",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    url: "/",
+    siteName: SITE_NAME,
     locale: "ko_KR",
     type: "website",
-    images: ["/logo.png"],
+    images: [{ url: "/logo.png", alt: "위드런치 With Lunch" }],
   },
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: SITE_NAME,
+      alternateName: SITE_NAME_EN,
+      url: SITE_URL,
+      logo: `${SITE_URL}/logo.png`,
+      telephone: DISPLAY_PHONE,
+      sameAs: [KAKAO_URL],
+    },
+    {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      alternateName: SITE_NAME_EN,
+      url: SITE_URL,
+      inLanguage: "ko-KR",
+      publisher: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: SITE_URL,
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -26,7 +65,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

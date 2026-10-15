@@ -3,6 +3,16 @@
 import { useState, useEffect, useRef } from "react";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import {
+  CALL_PHONE_TEL,
+  DISPLAY_PHONE,
+  KAKAO_URL,
+  MENU_URL,
+  ORANGE,
+  footerItemHref,
+  footerItemOpensNewTab,
+  primaryNav,
+} from "@/lib/site";
+import {
   ArrowRight,
   ArrowUpRight,
   ChevronLeft,
@@ -39,38 +49,6 @@ const saladBowl = "/images/KakaoTalk_Photo_2026-04-01-17-50-43_001.jpeg";
 const sandwich = "/images/KakaoTalk_Photo_2026-04-01-17-50-43_007.jpeg";
 const kakaoQr = "/images/kakao-qr.png";
 const logo = "/logo.png";
-
-const ORANGE = "#EB5722";
-
-const DISPLAY_PHONE = "1577-8519";
-const CALL_PHONE = "010-5507-2905";
-const CALL_PHONE_TEL = "01055072905";
-const KAKAO_URL = "https://pf.kakao.com/_JxbgKn";
-const MENU_URL =
-  "https://map.naver.com/p/entry/place/1927474710?placePath=%2Ffeed%3Fentry%3Dplt%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202610062152%26locale%3Dko%26svcName%3Dmap_pcv5&searchType=place&lng=127.1488436&lat=37.5854337&c=15.00,0,0,0,dh";
-
-function footerItemHref(item: string): string {
-  if (item === "식단표 보러가기") return MENU_URL;
-  if (item === "카카오톡 문의" || item === "카카오톡 채널 문의") {
-    return KAKAO_URL;
-  }
-  if (
-    item === "전화 문의" ||
-    item.startsWith("대표번호") ||
-    item.startsWith("고객센터")
-  ) {
-    return `tel:${CALL_PHONE_TEL}`;
-  }
-  return "#contact";
-}
-
-function footerItemOpensNewTab(item: string): boolean {
-  return (
-    item === "식단표 보러가기" ||
-    item === "카카오톡 문의" ||
-    item === "카카오톡 채널 문의"
-  );
-}
 
 function useHorizontalSwipe(
   length: number,
@@ -379,32 +357,33 @@ export function LandingPage() {
         }`}
       >
         <div className="max-w-[1320px] mx-auto px-6 lg:px-10 flex items-center justify-between h-16">
-          <a href="#" className="flex items-center">
+          <a href="/" className="flex items-center shrink-0">
             <ImageWithFallback
               src={logo}
-              alt="WITH LUNCH 위드런치"
+              alt="위드런치 With Lunch"
               className="h-9 w-auto object-contain shrink-0"
             />
             <span className="font-extrabold text-base tracking-tight ml-2 text-[#ea5312]">
-              With Lunch
+              위드런치
             </span>
           </a>
 
-          <nav className="hidden lg:flex items-center gap-7">
-            {[
-              { label: "도시락 메뉴", href: "#menu" },
-              { label: "이용 방법", href: "#how" },
-              { label: "가격 안내", href: "#price" },
-              { label: "문의하기", href: "#contact" },
-            ].map((n) => (
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-6" aria-label="주요 메뉴">
+            {primaryNav.map((n) => (
               <a
-                key={n.label}
+                key={n.href}
                 href={n.href}
-                className="text-[13px] font-medium text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors"
+                className="text-[13px] font-medium text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors whitespace-nowrap"
               >
                 {n.label}
               </a>
             ))}
+            <a
+              href="#contact"
+              className="text-[13px] font-medium text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors whitespace-nowrap"
+            >
+              문의하기
+            </a>
           </nav>
 
           <div className="hidden lg:flex items-center gap-3">
@@ -449,15 +428,10 @@ export function LandingPage() {
 
         {navOpen && (
           <div className="lg:hidden bg-white border-t border-black/[0.06] px-5 py-6 shadow-lg">
-            <nav className="space-y-1">
-              {[
-                { label: "도시락 메뉴", href: "#menu" },
-                { label: "이용 방법", href: "#how" },
-                { label: "가격 안내", href: "#price" },
-                { label: "문의하기", href: "#contact" },
-              ].map((n) => (
+            <nav className="space-y-1" aria-label="모바일 메뉴">
+              {primaryNav.map((n) => (
                 <a
-                  key={n.label}
+                  key={n.href}
                   href={n.href}
                   className="flex items-center justify-between py-3.5 border-b border-black/[0.05] text-[15px] font-semibold text-[#1A1A1A]"
                   onClick={() => setNavOpen(false)}
@@ -466,11 +440,20 @@ export function LandingPage() {
                   <ChevronRight className="w-4 h-4 text-[#1A1A1A]/25" />
                 </a>
               ))}
+              <a
+                href="#contact"
+                className="flex items-center justify-between py-3.5 border-b border-black/[0.05] text-[15px] font-semibold text-[#1A1A1A]"
+                onClick={() => setNavOpen(false)}
+              >
+                문의하기
+                <ChevronRight className="w-4 h-4 text-[#1A1A1A]/25" />
+              </a>
             </nav>
           </div>
         )}
       </header>
 
+      <main>
       {/* HERO */}
       <section className="pt-16 lg:min-h-[100svh] grid lg:grid-cols-[0.92fr_1.08fr] xl:grid-cols-[1fr_1fr] overflow-hidden">
         <div className="bg-[#141414] flex flex-col justify-start lg:justify-center px-6 sm:px-10 lg:px-10 xl:px-16 2xl:px-40 py-16 sm:py-20 lg:py-10 xl:py-14 2xl:py-0 pb-12 lg:pb-0 min-h-0 lg:min-h-[calc(100svh-4rem)] relative overflow-hidden">
@@ -884,7 +867,15 @@ export function LandingPage() {
             </div>
             <p className="text-[#1A1A1A]/50 text-sm max-w-sm leading-relaxed">
               도시락, 샐러드, 샌드위치까지. 바쁜 하루에도 가볍게, 든든하게 먹을
-              수 있도록 준비합니다.
+              수 있도록 준비합니다.{" "}
+              <a href="/weekly-menu" className="font-bold underline" style={{ color: ORANGE }}>
+                이번 주 식단표
+              </a>
+              와{" "}
+              <a href="/menu" className="font-bold underline" style={{ color: ORANGE }}>
+                메뉴 및 가격
+              </a>
+              을 확인해 보세요.
             </p>
           </div>
 
@@ -965,6 +956,17 @@ export function LandingPage() {
               <br />
               전화나 카톡으로 바로.
             </h2>
+            <p className="text-[#1A1A1A]/50 text-sm mt-4">
+              자세한 절차는{" "}
+              <a href="/order" className="font-bold underline" style={{ color: ORANGE }}>
+                주문 방법
+              </a>
+              , 가능 여부는{" "}
+              <a href="/delivery" className="font-bold underline" style={{ color: ORANGE }}>
+                배송 가능 지역
+              </a>
+              에서 안내합니다.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-5">
@@ -1519,6 +1521,7 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* FOOTER */}
       <footer className="bg-[#111111] pt-16 pb-10">
@@ -1528,7 +1531,7 @@ export function LandingPage() {
               <div className="mb-5">
                 <ImageWithFallback
                   src={logo}
-                  alt="WITH LUNCH 위드런치"
+                  alt="위드런치 With Lunch"
                   className="h-10 w-auto object-contain"
                 />
               </div>
@@ -1566,13 +1569,13 @@ export function LandingPage() {
                 ],
               },
               {
-                title: "이용 안내",
+                title: "안내",
                 items: [
-                  "전화 문의",
-                  "카카오톡 문의",
+                  "이번 주 식단표",
+                  "메뉴 및 가격",
                   "배송 가능 지역",
-                  "인원별 상담",
-                  "시작일 상담",
+                  "주문 방법",
+                  "전화 문의",
                 ],
               },
               {
