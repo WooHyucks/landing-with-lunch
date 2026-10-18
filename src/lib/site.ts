@@ -14,7 +14,9 @@ export const ORANGE = "#EB5722";
 
 export const HOME_TITLE = "위드런치 | 병원·사무실 점심 도시락 정기배송";
 export const HOME_DESCRIPTION =
-  "위드런치는 병원, 사무실, 공장 등을 위한 점심 도시락 정기배송 서비스입니다. 도시락, 샐러드, 샌드위치 메뉴와 주문 방법, 배송 가능 지역을 확인하세요.";
+  "위드런치는 병원·사무실·공장을 위한 점심 도시락 정기배송 서비스입니다. 도시락·샐러드·샌드위치를 편리하게 받아보세요.";
+export const HOME_OG_DESCRIPTION =
+  "병원·사무실 점심 고민은 위드런치에서 해결하세요. 도시락·샐러드·샌드위치 정기배송 서비스.";
 
 export const primaryNav = [
   { label: "이번 주 식단표", href: "/weekly-menu" },

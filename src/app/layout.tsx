@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HOME_DESCRIPTION, HOME_TITLE, KAKAO_URL, SITE_NAME, SITE_NAME_EN, SITE_URL, DISPLAY_PHONE } from "@/lib/site";
+import { HOME_DESCRIPTION, HOME_OG_DESCRIPTION, HOME_TITLE, KAKAO_URL, SITE_NAME, SITE_NAME_EN, SITE_URL, DISPLAY_PHONE } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: HOME_TITLE,
-    description: HOME_DESCRIPTION,
+    description: HOME_OG_DESCRIPTION,
     url: "/",
     siteName: SITE_NAME,
     locale: "ko_KR",
