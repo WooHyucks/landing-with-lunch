@@ -1732,6 +1732,9 @@ export function LandingPage() {
             <p className="text-[11px] font-bold" style={{ color: ORANGE }}>
               추가 할인 쿠폰 증정
             </p>
+            <p className="text-[10px] font-medium text-[#1A1A1A]/35 mt-0.5">
+              오프라인 쿠폰과 중복 불가
+            </p>
           </div>
         </button>
       </div>
@@ -1767,9 +1770,12 @@ export function LandingPage() {
               추가 할인 쿠폰 드려요
             </h3>
 
-            <p className="text-[#1A1A1A]/55 text-sm leading-relaxed mb-6">
+            <p className="text-[#1A1A1A]/55 text-sm leading-relaxed mb-2">
               점심을 3일 연속 이용하시면 추가 할인 쿠폰을 증정해드립니다.
               먼저 맛보고, 괜찮으면 그때 계속 이용하세요.
+            </p>
+            <p className="text-[11px] text-[#1A1A1A]/40 leading-relaxed mb-6">
+              오프라인으로 드린 쿠폰과는 중복 적용되지 않습니다.
             </p>
 
             <div className="bg-[#F8F7F5] rounded-2xl p-4 mb-6 space-y-3">

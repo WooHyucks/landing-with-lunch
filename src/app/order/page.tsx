@@ -63,6 +63,9 @@ export default function OrderPage() {
           </a>
           에서 확인할 수 있습니다.
         </p>
+        <p className="text-[12px] text-[#1A1A1A]/40 leading-relaxed mt-2">
+          오프라인으로 드린 쿠폰과는 중복 적용되지 않습니다.
+        </p>
       </section>
     </InfoLayout>
   );

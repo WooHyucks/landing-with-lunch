@@ -51,6 +51,9 @@ export default function MenuPage() {
           점심을 3일 연속 이용하시면 추가 할인 쿠폰을 드립니다. 먼저 맛보고,
           괜찮으면 그때 계속 이용할 수 있습니다.
         </p>
+        <p className="text-[12px] text-[#1A1A1A]/40 leading-relaxed mt-2">
+          오프라인으로 드린 쿠폰과는 중복 적용되지 않습니다.
+        </p>
         <p className="text-[#1A1A1A]/60 text-sm leading-relaxed mt-3">
           이번 주 구성은{" "}
           <a href="/weekly-menu" className="font-bold underline" style={{ color: "#EB5722" }}>
