@@ -53,7 +53,8 @@ export default function OrderPage() {
           <li>샐러드/샌드위치 여부</li>
         </ul>
         <p className="text-[#1A1A1A]/60 text-sm leading-relaxed mt-4">
-          점심을 3일 연속 이용하시면 추가 할인 쿠폰을 드립니다. 가격은{" "}
+          최초 이용 고객이 도시락을 3일 연속으로 드시면 무료 쿠폰을 드립니다.
+          가격은{" "}
           <a href="/menu" className="font-bold underline" style={{ color: "#EB5722" }}>
             메뉴 및 가격
           </a>

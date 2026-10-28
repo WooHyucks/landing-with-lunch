@@ -48,8 +48,8 @@ export default function MenuPage() {
       <section className="rounded-3xl bg-white border border-black/[0.06] p-6 lg:p-8">
         <h2 className="text-xl font-extrabold mb-3">이용 안내</h2>
         <p className="text-[#1A1A1A]/60 text-sm leading-relaxed">
-          점심을 3일 연속 이용하시면 추가 할인 쿠폰을 드립니다. 먼저 맛보고,
-          괜찮으면 그때 계속 이용할 수 있습니다.
+          최초 이용 고객이 도시락을 3일 연속으로 드시면 무료 쿠폰을 드립니다.
+          먼저 맛보고, 괜찮으면 그때 계속 이용할 수 있습니다.
         </p>
         <p className="text-[12px] text-[#1A1A1A]/40 leading-relaxed mt-2">
           오프라인으로 드린 쿠폰과는 중복 적용되지 않습니다.

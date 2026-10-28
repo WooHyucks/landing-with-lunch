@@ -186,8 +186,8 @@ const lunchPains = [
   {
     icon: Gift,
     emoji: "🎁",
-    title: "3일 먹고 쿠폰 받기",
-    desc: "3일 연속 이용 후 추가 할인 쿠폰을 드려요.",
+    title: "3일 먹고 무료 쿠폰",
+    desc: "최초 이용 고객이 3일 연속으로 드시면 무료 쿠폰을 드려요.",
   },
 ];
 
@@ -309,9 +309,9 @@ export function LandingPage() {
       icon: Heart,
     },
     {
-      value: "쿠폰",
-      label: "3일 먹고 받기",
-      sub: "after 3 days",
+      value: "무료",
+      label: "최초 3일 쿠폰",
+      sub: "first 3 days",
       icon: TicketPercent,
     },
     {
@@ -599,7 +599,7 @@ export function LandingPage() {
               {[
                 { v: "8,000원", l: "도시락", icon: UtensilsCrossed },
                 { v: "8,000원", l: "샐러드/샌드위치", icon: Heart },
-                { v: "쿠폰", l: "3일 먹고 받기", icon: Gift },
+                { v: "무료", l: "최초 3일 쿠폰", icon: Gift },
               ].map(({ v, l, icon: Icon }) => (
                 <div
                   key={l}
@@ -1730,7 +1730,7 @@ export function LandingPage() {
               3일 먹고 쿠폰
             </p>
             <p className="text-[11px] font-bold" style={{ color: ORANGE }}>
-              추가 할인 쿠폰 증정
+              최초 무료 쿠폰
             </p>
             <p className="text-[10px] font-medium text-[#1A1A1A]/35 mt-0.5">
               오프라인 쿠폰과 중복 불가
@@ -1761,18 +1761,18 @@ export function LandingPage() {
               className="text-[11px] font-bold tracking-[0.14em] uppercase mb-3"
               style={{ color: ORANGE }}
             >
-              첫 방문 혜택
+              최초 이용 혜택
             </p>
 
             <h3 className="text-2xl font-extrabold text-[#1A1A1A] leading-tight mb-3">
-              3일 드시면
+              최초 3일 드시면
               <br />
-              추가 할인 쿠폰 드려요
+              무료 쿠폰 드려요
             </h3>
 
             <p className="text-[#1A1A1A]/55 text-sm leading-relaxed mb-2">
-              점심을 3일 연속 이용하시면 추가 할인 쿠폰을 증정해드립니다.
-              먼저 맛보고, 괜찮으면 그때 계속 이용하세요.
+              최초 이용 고객이 도시락을 3일 연속으로 드시면 무료 쿠폰을
+              드립니다. 먼저 맛보고, 괜찮으면 그때 계속 이용하세요.
             </p>
             <p className="text-[11px] text-[#1A1A1A]/40 leading-relaxed mb-6">
               오프라인으로 드린 쿠폰과는 중복 적용되지 않습니다.
@@ -1780,7 +1780,7 @@ export function LandingPage() {
 
             <div className="bg-[#F8F7F5] rounded-2xl p-4 mb-6 space-y-3">
               {[
-                { icon: Gift, text: "3일 연속 이용 시 쿠폰 증정" },
+                { icon: Gift, text: "최초 3일 연속 이용 시 무료 쿠폰" },
                 { icon: UtensilsCrossed, text: "도시락 8,000원" },
                 { icon: Heart, text: "샐러드/샌드위치 8,000원" },
               ].map(({ icon: Icon, text }) => (
